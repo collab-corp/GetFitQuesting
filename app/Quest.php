@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Filterable;
+use Gstt\Achievements\Model\AchievementDetails;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
@@ -13,16 +14,22 @@ class Quest extends Model
 {
     use Rememberable, Searchable, HasMediaTrait, Filterable, HasTags;
     
+    /**
+     * The fillable fields.
+     *
+     * @var array
+     */
     protected $fillable = [
         'difficulty', 'experience',
-        'requires_team',
         'link', 'name', 'slug', 'type',
-        'description'
+        'description', 'creator_id'
     ];
 
-    protected $casts = [
-        'requires_team' => 'boolean'
-    ];
+    /**
+     * Boot the model.
+     *
+     * @return void
+     */
     protected static function boot()
     {
         parent::boot();
@@ -31,6 +38,12 @@ class Quest extends Model
             if (! $quest->link) {
                 $quest->update(['link' => url('quest', $quest)]);
             }
+
+            $quest->achievements()->saveMany(
+                \App\Achievement::general('quest')->map(function ($achievement) {
+                    return (new $achievement)->getModel();
+                })
+            );
         });
 
         static::saving(function ($quest) {
@@ -38,24 +51,68 @@ class Quest extends Model
                 $quest->slug = str_slug($quest->name);
             }
         });
-
-        static::addGlobalScope('withTags', function ($query) {
-            $query->with('tags');
-        });
     }
 
-    public function complete($user, $team = null)
+    /**
+     * Get the valid quest types.
+     *
+     * @return array
+     */
+    public static function validTypes()
     {
-        return $user->progress()->create([
-            'user_id' => $user->id,
+        return ['cardio', 'strength', 'power', 'muscle', 'event'];
+    }
+
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
+    /**
+     * Get the amount of points the quest yields.
+     *
+     * @return integer
+     */
+    public function getPointsAttribute()
+    {
+        return ($this->experience * $this->difficulty);
+    }
+
+    /**
+     * Complete the quest, adding to achievement & progress.
+     *
+     * @param  \App\User | \App\Team $achiever
+     * @return \App\Progress
+     */
+    public function complete($achiever)
+    {
+        $this->achievements()
+            ->whereNotIn('achievement_id', $achiever->achievements->pluck('id'))
+            ->select(['class_name'])
+            ->each(function ($details) use ($achiever) {
+                $achiever->addProgress($details->getClass(), $this->points);
+            });
+
+        return $achiever->progress()->create([
             'quest_id' => $this->id,
-            'team_id' => optional($team)->id
+            'experience' => $this->points
         ]);
     }
 
+    /**
+     * Add media files to the quest.
+     *
+     * @param mixed $files
+     * @param string $collection
+     */
     public function addMediaFiles($files, string $collection = 'default')
     {
-        foreach ($files as $file) {
+        foreach (array_wrap($files) as $file) {
             if (is_string($file) && Str::startsWith($file, ['http', 'https'])) {
                 $this->addMediaFromUrl($file)
                      ->toMediaCollection($collection);
@@ -66,11 +123,41 @@ class Quest extends Model
         }
     }
 
+    /**
+     * The achievements that can be obtained by completing this quest.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function achievements()
+    {
+        return $this->belongsToMany(AchievementDetails::class, 'achievement_quest', 'quest_id', 'achievement_id');
+    }
+
+    /**
+     * The quest creator.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'creator_id');
+    }
+
+    /**
+     * The search index name.
+     *
+     * @return string
+     */
     public function searchableAs()
     {
         return 'quests';
     }
 
+    /**
+     * The fields to be searchable.
+     *
+     * @return array
+     */
     public function toSearchableArray()
     {
         $array = $this->toArray();
