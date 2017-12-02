@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAchievementsTable extends Migration
+class CreateProgressTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,13 +12,15 @@ class CreateAchievementsTable extends Migration
      */
     public function up()
     {
-        Schema::create('achievements', function (Blueprint $table) {
+        Schema::create('progress', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('quest_id')->index();
             $table->foreign('quest_id')->references('id')->on('quests');
-            $table->string('name');
-            $table->text('description');
-            $table->unsignedInteger('required_experience');
+            $table->unsignedInteger('user_id')->nullable()->index();
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->unsignedInteger('team_id')->nullable()->index();
+            $table->foreign('team_id')->references('id')->on('teams');
+            $table->integer('experience');
             $table->timestamps();
         });
     }
@@ -30,6 +32,6 @@ class CreateAchievementsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('achievements');
+        Schema::drop('progress');
     }
 }

@@ -2,13 +2,24 @@
 
 namespace App;
 
+use App\Events\Progress\ProgressCreated;
 use Illuminate\Database\Eloquent\Model;
 
 class Progress extends Model
 {
-    protected $guarded = [];
-
     protected $table = 'progress';
+
+    protected $fillable = ['quest_id', 'user_id', 'team_id', 'experience'];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function ($progress) {
+            optional($progress->user)->computeExperience();
+            optional($progress->team)->computeExperience();
+        });
+    }
 
     public function user()
     {

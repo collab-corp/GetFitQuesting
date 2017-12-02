@@ -5,6 +5,7 @@ namespace App;
 use App\Models\AccountUserPivot;
 use App\Models\Auth\Account;
 use App\Models\News;
+use Gstt\Achievements\Achiever;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
@@ -12,7 +13,7 @@ use Mpociot\Teamwork\Traits\UserHasTeams;
 
 class User extends Authenticatable
 {
-    use Notifiable, HasApiTokens, UserHasTeams;
+    use Notifiable, HasApiTokens, UserHasTeams, Achiever, HasProgress;
 
     /**
      * The attributes that are mass assignable.
@@ -74,10 +75,5 @@ class User extends Authenticatable
     public function testimonials()
     {
         return $this->hasMany(Testimonial::class, 'author_id');
-    }
-
-    public function progress()
-    {
-        return $this->hasMany(Progress::class);
     }
 }

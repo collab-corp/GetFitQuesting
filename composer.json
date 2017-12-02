@@ -1,4 +1,5 @@
 {
+    "minimum-stability": "dev",
     "name": "laravel/laravel",
     "description": "The Laravel Framework.",
     "keywords": ["framework", "laravel"],
@@ -18,6 +19,7 @@
         "laravel/scout": "^3.0",
         "laravel/tinker": "^1.0",
         "mpociot/teamwork": "^5.0",
+        "sasin91/laravel-achievements": "dev-master",
         "spatie/laravel-medialibrary": "^6.6",
         "spatie/laravel-tags": "^2.0",
         "watson/rememberable": "^2.0"
@@ -61,6 +63,9 @@
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover"
+        ],
+        "test": [
+            "./vendor/bin/phpunit"
         ]
     },
     "config": {

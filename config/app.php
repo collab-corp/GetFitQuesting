@@ -167,7 +167,6 @@ return [
         /*
          * Package Service Providers...
          */
-        Gstt\Achievements\AchievementsServiceProvider::class,
         Mpociot\Teamwork\TeamworkServiceProvider::class,
 
         /*

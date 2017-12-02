@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "0335076a758668c93c5f63b36cccfbca",
+    "content-hash": "1b82634d1294cf709c2abf008713432c",
     "packages": [
         {
             "name": "algolia/algoliasearch-client-php",
@@ -2555,6 +2555,61 @@
                 "uuid"
             ],
             "time": "2017-09-22T20:46:04+00:00"
+        },
+        {
+            "name": "sasin91/laravel-achievements",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sasin91/laravel-achievements.git",
+                "reference": "9d6eb5b46fd00047cee49daecc25a6aa3d87a140"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sasin91/laravel-achievements/zipball/9d6eb5b46fd00047cee49daecc25a6aa3d87a140",
+                "reference": "9d6eb5b46fd00047cee49daecc25a6aa3d87a140",
+                "shasum": ""
+            },
+            "require": {
+                "ramsey/uuid": "^3.5"
+            },
+            "require-dev": {
+                "laravel/laravel": "^5.3",
+                "phpunit/phpunit": "^5.6"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Gstt\\Achievements\\AchievementsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "src/Migrations"
+                ],
+                "psr-4": {
+                    "Gstt\\Achievements\\": "src/",
+                    "Gstt\\Tests\\": "tests/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Gabriel Simonetti",
+                    "email": "simonettigo@gmail.com"
+                },
+                {
+                    "name": "Jonas Kervin Hansen",
+                    "email": "jonas.kerwin.hansen@gmail.com"
+                }
+            ],
+            "description": "Personal fork of gstt/laravel-achievements.",
+            "time": "2017-12-02 19:17:24"
         },
         {
             "name": "spatie/eloquent-sortable",
@@ -6054,8 +6109,10 @@
         }
     ],
     "aliases": [],
-    "minimum-stability": "stable",
-    "stability-flags": [],
+    "minimum-stability": "dev",
+    "stability-flags": {
+        "sasin91/laravel-achievements": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

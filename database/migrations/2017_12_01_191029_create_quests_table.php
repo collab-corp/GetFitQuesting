@@ -16,7 +16,6 @@ class CreateQuestsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('difficulty')->index();
             $table->unsignedInteger('experience')->default(5);
-            $table->boolean('requires_team')->default(false);
             $table->string('link')->nullable();
             $table->string('name');
             $table->string('slug')->nullable();
