@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Filters\QuestFilters;
 use App\Http\Controllers\Controller;
+use App\Queries\QuestsIndexQuery;
 use App\Quest;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -20,16 +22,19 @@ class QuestController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(QuestsIndexQuery $query)
     {
         $this->validate(request(), [
             'perPage' => 'nullable|integer|max:25',
             'columns' => 'nullable|array',
             'pageName' => 'nullable|string',
-            'page' => 'nullable|integer'
+            'page' => 'nullable|integer',
+
+            'type' => ['string', Rule::in(Quest::validTypes())],
+            'search' => 'string|min:2|max:40'
         ]);
 
-        return Quest::paginate(
+        return $query()->paginate(
             request('perPage'),
             request('columns'),
             request('pageName'),

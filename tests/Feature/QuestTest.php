@@ -57,10 +57,43 @@ class QuestTest extends TestCase
     /** @test */
     public function canSearchForQuests()
     {
+        config(['scout.driver' => 'algolia']);
+
+        $quest = create(\App\Quest::class, ['type' => 'strength']);
+
+        do {
+            // Account for latency.
+            sleep(.25);
+
+            $results = $this->json('GET', route('quests.index'), ['search' => 'strength'])
+                        ->assertSuccessful()
+                        ->assertSee('strength')
+                        ->json()['data'];
+        } while (empty($results));
+
+        $this->assertCount(1, $results);
+
+        $quest->unsearchable();
     }
 
     /** @test */
     public function canFilterQuestsByType()
     {
+        factory(\App\Quest::class)->times(3)->create(['type' => 'cardio']);
+        create(\App\Quest::class, ['type' => 'strength']);
+
+        $results = $this->json('GET', route('quests.index'), ['type' => 'cardio'])
+                        ->assertSuccessful()
+                        ->assertSee('cardio')
+                        ->assertDontSee('strength');
+
+        $this->assertCount(3, $results->decodeResponseJson()['data']);
+    }
+
+    /** @test */
+    public function cannotFilterByAnInvalidType()
+    {
+        $this->json('GET', route('quests.index'), ['type' => 'invalid-type'])
+            ->assertJsonValidationErrors('type');
     }
 }
