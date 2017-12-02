@@ -2,11 +2,19 @@
 
 namespace App\Http\Controllers\API;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Quest;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class QuestController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api')->except('index', 'show');
+        $this->authorizeResource(Quest::class);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,17 +22,19 @@ class QuestController extends Controller
      */
     public function index()
     {
-        //
-    }
+        $this->validate(request(), [
+            'perPage' => 'nullable|integer|max:25',
+            'columns' => 'nullable|array',
+            'pageName' => 'nullable|string',
+            'page' => 'nullable|integer'
+        ]);
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return Quest::paginate(
+            request('perPage'),
+            request('columns'),
+            request('pageName'),
+            request('page')
+        );
     }
 
     /**
@@ -35,7 +45,16 @@ class QuestController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return Quest::create(
+            $request->validate([
+                'difficulty' => 'required|integer|in:1,2,3,4,5',
+                'experience' => 'required|integer',
+                'name' => 'required|string|max:255|min:3',
+                'slug' => 'nullable|string|slug',
+                'type' => ['required', 'string', Rule::in(Quest::validTypes())],
+                'description' => 'required|string|max:255'
+            ])
+        );
     }
 
     /**
@@ -46,30 +65,26 @@ class QuestController extends Controller
      */
     public function show($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        return Quest::with(['tags', 'media'])->findOrFail($id);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Quest  $quest
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Quest $quest)
     {
-        //
+        return tap($quest)->update($request->validate([
+            'difficulty' => 'integer|in:1,2,3,4,5',
+            'experience' => 'integer',
+            'name' => 'string|max:255|min:3',
+            'slug' => 'nullable|string|slug',
+            'type' => ['string', Rule::in(Quest::validTypes())],
+            'description' => 'string|max:255'
+        ]));
     }
 
     /**
@@ -78,8 +93,8 @@ class QuestController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Quest $quest)
     {
-        //
+        $quest->delete();
     }
 }

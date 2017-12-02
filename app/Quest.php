@@ -7,10 +7,11 @@ use Gstt\Achievements\Model\AchievementDetails;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+use Spatie\MediaLibrary\HasMedia\Interfaces\HasMedia;
 use Spatie\Tags\HasTags;
 use Watson\Rememberable\Rememberable;
 
-class Quest extends Model
+class Quest extends Model implements HasMedia
 {
     use Rememberable, Searchable, HasMediaTrait, Filterable, HasTags;
     
