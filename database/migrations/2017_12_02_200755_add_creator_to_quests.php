@@ -13,7 +13,7 @@ class AddCreatorToQuests extends Migration
     public function up()
     {
         Schema::table('quests', function (Blueprint $table) {
-            $table->unsignedInteger('creator_id')->index();
+            $table->unsignedInteger('creator_id')->nullable()->index();
             $table->foreign('creator_id')->references('id')->on('users');
         });
     }
