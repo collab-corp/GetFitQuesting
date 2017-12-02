@@ -15,7 +15,7 @@ class CreateQuestsTable extends Migration
         Schema::create('quests', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('difficulty')->index();
-            $table->unsignedInteger('experience')->default(100);
+            $table->unsignedInteger('experience')->default(5);
             $table->boolean('requires_team')->default(false);
             $table->string('link')->nullable();
             $table->string('name');
