@@ -3,12 +3,16 @@
 namespace Tests;
 
 include __DIR__."/helpers.php";
+use App\Exceptions\Handler;
+use App\User;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Illuminate\Support\Facades\Artisan;
+use Laravel\Passport\Passport;
 
 abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
-    
+
     /**
      * Boot the testing helper traits.
      *
@@ -23,6 +27,15 @@ abstract class TestCase extends BaseTestCase
         }
 
         return parent::setupTraits();
+    }
+
+    protected function signIn($user = null)
+    {
+        $user = $user ?? create(User::class);
+
+        Passport::actingAs($user);
+
+        return $this;
     }
 
     protected function enableExceptionHandling()
