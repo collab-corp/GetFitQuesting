@@ -14,3 +14,4 @@ use Illuminate\Http\Request;
 */
 
 Route::resource('news', 'API\NewsController');
+Route::apiResource('quests', 'API\QuestController');
