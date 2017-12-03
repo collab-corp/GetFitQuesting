@@ -31,4 +31,14 @@ class MeTest extends TestCase
              ->assertSuccessful()
              ->assertSee('Team blue');
     }
+
+    /** @test */
+    public function cannotEagerLoadInvalidRelations()
+    {
+        $user = create(\App\User::class);
+
+        $this->signIn($user)
+             ->json('GET', route('me'), ['relations' => ['invalid-relation']])
+             ->assertJsonValidationErrors('relations');
+    }
 }
