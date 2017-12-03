@@ -29,19 +29,4 @@ class QuestTest extends TestCase
             $this->assertContains($achievement->class_name, $generalAchievements);
         });
     }
-
-    /** @test */
-    public function aQuestCanHaveTags()
-    {
-    }
-
-    /** @test */
-    public function aQuestHaveMediaFiles()
-    {
-    }
-
-    /** @test */
-    public function aQuestCanRequireATeam()
-    {
-    }
 }

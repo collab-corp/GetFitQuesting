@@ -28,19 +28,4 @@ class ProgressTest extends TestCase
             'experience' => 20 // difficulty * experience
         ]);
     }
-
-    /** @test */
-    public function progressIsMeasuredBySummerizingQuestExperience()
-    {
-    }
-
-    /** @test */
-    public function achievementsGetsUnlockedByProgress()
-    {
-    }
-
-    /** @test */
-    public function canFilterQuestsByDificulty()
-    {
-    }
 }
