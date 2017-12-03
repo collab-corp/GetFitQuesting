@@ -2,6 +2,8 @@
 
 use Carbon\CarbonInterval;
 use Illuminate\Container\BoundMethod;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Fluent;
 use Illuminate\Support\Str;
@@ -214,5 +216,42 @@ if (!function_exists('str_lower')) {
     function str_lower($value)
     {
         return Str::lower($value);
+    }
+}
+
+if (!function_exists('relation_exists')) {
+    /**
+     * Determine whether a relation exists.
+     * 
+     * @param  Model  $model   
+     * @param  string $relation
+     * @return boolean
+     */
+    function relation_exists(Model $model, string $relation)
+    {
+        return method_exists($model, $relation) 
+        && $model->$relation() instanceof Relation;
+    }
+}
+
+if (!function_exists('relations_exists')) {
+    /**
+     * Determine whether given relations exists.
+     * 
+     * @param  Model  $model   
+     * @param  string[] $relations
+     * @return boolean
+     */
+    function relations_exists(Model $model, ...$relations)
+    {
+        foreach (array_wrap(...$relations) as $relation) {
+            if (relation_exists($model, $relation)) {
+                continue;
+            }
+
+            return false;
+        }
+
+        return true;
     }
 }

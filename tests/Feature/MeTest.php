@@ -15,8 +15,20 @@ class MeTest extends TestCase
         $user = create(\App\User::class, ['email' => 'john@example.com']);
 
         $this->signIn($user)
-             ->json('GET', route('me.details'))
-             ->dump()
+             ->json('GET', route('me'))
+             ->assertSuccessful()
              ->assertSee('john@example.com');
+    }
+
+    /** @test */
+    public function canLoadRelationsOntoMyUser()
+    {
+        $user = create(\App\User::class);
+        $user->teams()->save(create(\App\Team::class, ['name' => 'Team blue']));
+
+        $this->signIn($user)
+             ->json('GET', route('me'), ['relations' => ['teams']])
+             ->assertSuccessful()
+             ->assertSee('Team blue');
     }
 }

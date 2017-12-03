@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\API;
 
-use Illuminate\Http\Request;
+use App\Filters\MeFilters;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\User\MeRequest;
+use Illuminate\Http\Request;
 
 class MeController extends Controller
 {
@@ -12,8 +14,12 @@ class MeController extends Controller
         $this->middleware('auth:api');
     }
 
-    public function details()
+    public function __invoke(MeRequest $request)
     {
-        return request()->user();
+    	return tap(request()->user(), function ($user) {
+    		if (request()->has('relations')) {
+    			$user->load(request('relations'));
+    		}
+    	});
     }
 }

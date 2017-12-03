@@ -15,3 +15,4 @@ use Illuminate\Http\Request;
 
 Route::resource('news', 'NewsController');
 Route::apiResource('quests', 'QuestController');
+Route::name('me')->get('me', 'MeController');
