@@ -7,6 +7,7 @@ use App\Models\AccountUserPivot;
 use App\Models\Auth\Account;
 use App\Models\News;
 use Gstt\Achievements\Achiever;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
@@ -15,7 +16,7 @@ use Mpociot\Teamwork\Traits\UserHasTeams;
 
 class User extends Authenticatable
 {
-    use Notifiable, HasApiTokens, UserHasTeams, Achiever, HasProgress;
+    use Notifiable, HasApiTokens, UserHasTeams, Achiever, HasProgress, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
