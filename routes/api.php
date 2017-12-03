@@ -16,3 +16,5 @@ use Illuminate\Http\Request;
 Route::resource('news', 'NewsController');
 Route::apiResource('quests', 'QuestController');
 Route::name('me')->get('me', 'MeController');
+Route::name('me.update')->patch('me', 'MeController@update');
+Route::name('me.destroy')->delete('me', 'MeController@destroy');
