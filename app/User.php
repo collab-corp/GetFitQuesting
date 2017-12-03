@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Jobs\User\ScrapOldAvatar;
 use App\Models\AccountUserPivot;
 use App\Models\Auth\Account;
 use App\Models\News;
@@ -33,6 +34,17 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::updating(function ($user) {
+            if ($user->isDirty('avatar')) {
+                ScrapOldAvatar::dispatch($user);
+            }
+        });
+    }
 
     public function getAvatarAttribute(string $avatar = null)
     {
