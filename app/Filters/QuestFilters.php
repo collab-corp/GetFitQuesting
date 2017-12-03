@@ -2,8 +2,6 @@
 
 namespace App\Filters;
 
-use App\Models\News;
-
 class QuestFilters extends Filters
 {
     protected $filters = ['type'];
