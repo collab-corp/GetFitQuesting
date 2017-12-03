@@ -8,6 +8,7 @@ use App\Models\News;
 use Gstt\Achievements\Achiever;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Passport\HasApiTokens;
 use Mpociot\Teamwork\Traits\UserHasTeams;
 
@@ -21,7 +22,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'photo'
+        'name', 'email', 'password', 'avatar'
     ];
 
     /**
@@ -33,9 +34,17 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function getPhotoAttribute(string $photo = null)
+    public function getAvatarAttribute(string $avatar = null)
     {
-        return $photo ?? 'https://www.gravatar.com/avatar/d5570db0d14ecdc8b629e6d03507d577.jpg?s=200&d=mm';
+        if (empty($avatar)) {
+            return 'https://www.gravatar.com/avatar/d5570db0d14ecdc8b629e6d03507d577.jpg?s=200&d=mm';
+        }
+
+        if (is_url($avatar)) {
+            return $avatar;
+        }
+
+        return Storage::url($avatar);
     }
 
     public function onAnyTeam($teams)

@@ -255,3 +255,18 @@ if (!function_exists('relations_exists')) {
         return true;
     }
 }
+
+if (!function_exists('is_url')) {
+    /**
+     * Determine is given value is an url.
+     *
+     * @param  string $value
+     * @param  array $patterns 
+     *
+     * @return bool
+     */
+    function is_url($value, array $patterns = ['http', 'https']) 
+    {
+        return is_string($value) && starts_with($value, $patterns);
+    }
+}

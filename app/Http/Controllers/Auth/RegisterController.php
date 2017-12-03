@@ -51,6 +51,7 @@ class RegisterController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
+            'avatar' => 'image'
         ]);
     }
 
@@ -62,10 +63,16 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        return tap(User::make([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
-        ]);
+        ]), function ($user) use($data) {
+            if (array_key_exists('avatar', $data)) {
+                $user->avatar = request('avatar')->store('avatars', 's3');
+            }
+
+            $user->saveOrFail();
+        });
     }
 }

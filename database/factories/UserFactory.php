@@ -17,6 +17,7 @@ $factory->define(App\User::class, function (Faker $faker) {
     static $password;
 
     return [
+    	'avatar' => 'https://www.gravatar.com/avatar/d5570db0d14ecdc8b629e6d03507d577.jpg?s=200&d=mm',
         'name' => $faker->name,
         'email' => $faker->unique()->safeEmail,
         'password' => $password ?: $password = bcrypt('secret'),
