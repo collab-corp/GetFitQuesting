@@ -92,6 +92,17 @@ class QuestTest extends TestCase
     }
 
     /** @test */
+    public function canFilterQuestsByDifficulty()
+    {
+        create(\App\Quest::class, ['difficulty' => 3]);
+        //create(\App\Quest::class, ['difficulty' => 1], 2);
+
+        $this->json('GET', route('quests.index'), ['difficulty' => 3])
+             ->assertSuccessful()
+             ->assertCount(1);
+    }
+
+    /** @test */
     public function cannotFilterByAnInvalidType()
     {
         $this->json('GET', route('quests.index'), ['type' => 'invalid-type'])
