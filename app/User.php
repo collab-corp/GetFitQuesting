@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Jobs\User\ScrapOldAvatar;
+use App\Jobs\User\ScrapOwnedRelations;
 use App\Models\AccountUserPivot;
 use App\Models\Auth\Account;
 use App\Models\News;
@@ -44,6 +45,12 @@ class User extends Authenticatable
             if ($user->isDirty('avatar')) {
                 ScrapOldAvatar::dispatch($user);
             }
+        });
+
+        static::deleted(function ($user) {
+            ScrapOwnedRelations::dispatch($user);
+
+            Storage::disk('s3')->delete($user->avatar);
         });
     }
 
