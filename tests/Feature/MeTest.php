@@ -99,7 +99,7 @@ class MeTest extends TestCase
 
         $this->assertDatabaseHas('users', [
             'id' => $user->id,
-            'deleted_at' => now()
+            'deleted_at' => now()->format('Y-m-d H:i:s')
         ]);
     }
 }
