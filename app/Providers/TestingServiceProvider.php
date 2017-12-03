@@ -22,7 +22,13 @@ class TestingServiceProvider extends ServiceProvider
     public function registerTestResponseMacros()
     {
         TestResponse::macro('assertCount', function ($excepted) {
-            PHPUnit::assertCount($excepted, $this->decodeResponseJson());
+            $json = $this->json();
+
+            if (array_key_exists('data', $json)) {
+                $json = $json['data'];
+            }
+
+            PHPUnit::assertCount($excepted, $json);
 
             return $this;
         });
