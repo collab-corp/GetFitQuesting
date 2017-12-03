@@ -5,21 +5,13 @@ use App\Models\News;
 
 class NewsFilters extends Filters
 {
-    protected $filters = ['tags', 'latest', 'oldest', 'published_at', 'author_id', 'by'];
+    use DateFilters;
+
+    protected $filters = ['tags', 'published_at', 'author_id', 'by'];
 
     protected function tags($value)
     {
         return $this->query->withAnyTags($value);
-    }
-
-    protected function latest($value = null)
-    {
-        return $this->query->latest($value ?? 'created_at');
-    }
-
-    protected function oldest($value = null)
-    {
-        return $this->query->oldest($value ?? 'created_at');
     }
 
     protected function published_at($value)

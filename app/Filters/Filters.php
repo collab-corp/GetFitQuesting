@@ -39,6 +39,24 @@ abstract class Filters
     public function __construct(Request $request)
     {
         $this->request = $request;
+
+        $this->registerTraits();
+    }
+
+    /**
+     * Register traits.
+     * 
+     * @return void
+     */
+    protected function registerTraits()
+    {
+        foreach (class_uses_recursive($this) as $trait) {
+            $method = "register{$trait}";
+
+            if (method_exists($this, $method)) {
+                $this->$method();
+            }
+        }
     }
 
     /**
