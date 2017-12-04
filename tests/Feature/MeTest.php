@@ -97,9 +97,6 @@ class MeTest extends TestCase
         $this->json('DELETE', route('me.destroy'))
              ->assertSuccessful();
 
-        $this->assertDatabaseHas('users', [
-            'id' => $user->id,
-            'deleted_at' => now()->format('Y-m-d H:i:s')
-        ]);
+        $this->assertTrue($user->fresh()->trashed());
     }
 }
