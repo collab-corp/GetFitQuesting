@@ -2,13 +2,13 @@
 
 namespace App\Queries;
 
-use App\Filters\QuestFilters;
-use App\Quest;
+use App\Filters\StoryFilters;
+use App\Story;
 use Illuminate\Http\Request;
 
-class QuestsIndexQuery
+class StoryIndexQuery
 {
-    public function __construct(QuestFilters $filters)
+    public function __construct(StoryFilters $filters)
     {
         $this->filters = $filters;
     }
@@ -18,7 +18,7 @@ class QuestsIndexQuery
         $request = $this->filters->getRequest();
 
         return $request->has('search')
-            ? Quest::search($request->get('search'))
-            : Quest::filter($this->filters);
+            ? Story::search($request->get('search'))
+            : Story::filter($this->filters);
     }
 }

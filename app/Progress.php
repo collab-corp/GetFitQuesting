@@ -9,7 +9,7 @@ class Progress extends Model
 {
     protected $table = 'progress';
 
-    protected $fillable = ['quest_id', 'user_id', 'team_id', 'experience'];
+    protected $fillable = ['quest_id', 'story_id', 'user_id', 'team_id', 'experience'];
 
     protected static function boot()
     {
@@ -29,6 +29,11 @@ class Progress extends Model
     public function team()
     {
         return $this->belongsTo(Team::class);
+    }
+
+    public function story()
+    {
+        return $this->belongsTo(Story::class);
     }
 
     public function quest()

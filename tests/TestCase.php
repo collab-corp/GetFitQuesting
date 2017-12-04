@@ -50,6 +50,13 @@ abstract class TestCase extends BaseTestCase
         return $this;
     }
 
+    protected function asFirstAdmin()
+    {
+        $admin = create(\App\User::class, ['email' => array_first(Admin::emails())]);
+
+        return $this->signIn($admin);
+    }
+
     protected function enableExceptionHandling()
     {
         $this->app->forgetInstance(ExceptionHandler::class);

@@ -25,6 +25,16 @@ trait HasProgress
     }
 
     /**
+     * The stories the achiever is enrolled in.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
+    public function stories()
+    {
+        return $this->belongsToMany(Story::class, 'progress', null, null, null, null, Progress::class);
+    }
+
+    /**
      * The quests the achiever has completed.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough

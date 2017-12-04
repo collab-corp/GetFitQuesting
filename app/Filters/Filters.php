@@ -45,7 +45,7 @@ abstract class Filters
 
     /**
      * Register traits.
-     * 
+     *
      * @return void
      */
     protected function registerTraits()
@@ -76,6 +76,16 @@ abstract class Filters
         }
 
         return $this->query;
+    }
+
+    /**
+     * Get the current request instance.
+     *
+     * @return \Illuminate\Http\Request
+     */
+    public function getRequest()
+    {
+        return $this->request;
     }
 
     /**

@@ -114,7 +114,7 @@ class Quest extends Model implements HasMedia
     public function addMediaFiles($files, string $collection = 'default')
     {
         foreach (array_wrap($files) as $file) {
-            if (is_string($file) && Str::startsWith($file, ['http', 'https'])) {
+            if (is_url($file)) {
                 $this->addMediaFromUrl($file)
                      ->toMediaCollection($collection);
             } else {
@@ -122,6 +122,16 @@ class Quest extends Model implements HasMedia
                      ->toMediaCollection($collection);
             }
         }
+    }
+
+    /**
+     * The stories this quest is part of.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function stories()
+    {
+        return $this->belongsToMany(Story::class, 'quest_story');
     }
 
     /**
