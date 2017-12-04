@@ -3,6 +3,7 @@
 namespace Tests;
 
 include __DIR__."/helpers.php";
+use App\Admin;
 use App\Exceptions\Handler;
 use App\User;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
@@ -12,6 +13,17 @@ use Laravel\Passport\Passport;
 abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
+
+    protected function setUp()
+    {
+        parent::setUp();
+
+        if (empty(Admin::emails())) {
+            config([
+                'admin.emails' => [faker()->safeEmail()]
+            ]);
+        }
+    }
 
     /**
      * Boot the testing helper traits.
