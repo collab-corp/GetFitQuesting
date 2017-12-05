@@ -36,6 +36,19 @@ trait HasProgress
     }
 
     /**
+     * Leave a given story.
+     *
+     * @param  \App\Story $story
+     * @return void
+     */
+    public function leave($story)
+    {
+        $this->progress()
+            ->where('story_id', $story->id)
+            ->delete();
+    }
+
+    /**
      * The stories the achiever is enrolled in.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough

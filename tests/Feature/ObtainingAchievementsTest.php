@@ -1,5 +1,7 @@
 <?php
 
+namespace Tests\Feature;
+
 use Gstt\Achievements\Event\Unlocked;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
@@ -18,8 +20,8 @@ class ObtainingAchievementsTest extends TestCase
 
         $achievement = new TenPointsFakeAchievement;
 
-        $user = create(App\User::class);
-        $quest = create(App\Quest::class, ['difficulty' => 1, 'experience' => 10]);
+        $user = create(\App\User::class);
+        $quest = create(\App\Quest::class, ['difficulty' => 1, 'experience' => 10]);
         $quest->achievements()->save($achievement->getModel());
         
         $quest->complete($user);

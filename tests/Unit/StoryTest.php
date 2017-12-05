@@ -8,19 +8,29 @@ use Tests\TestCase;
 
 class StoryTest extends TestCase
 {
-	use RefreshDatabase;
+    use RefreshDatabase;
 
-	/** @test */
-	function canListStoriesEnrolledByAUser() 
-	{
-		$user = create(\App\User::class);
+    /** @test */
+    public function canListStoriesEnrolledByAUser()
+    {
+        $user = create(\App\User::class);
 
-		$story = create(Story::class);
-		$user->stories()->attach($story);
+        $story = create(Story::class);
+        $user->stories()->attach($story);
 
-		$stories = Story::enrolledBy($user)->get();
+        $stories = Story::enrolledBy($user)->get();
 
-		$this->assertCount(1, $stories);
-		$this->assertTrue($stories->contains($story));
-	} 
+        $this->assertCount(1, $stories);
+        $this->assertTrue($stories->contains($story));
+    }
+
+    /** @test */
+    public function leavingATeamStorySoftDeletesAllRelativeProgress()
+    {
+        // enroll a team story
+        //
+        // leave the team story
+        //
+        // assert progress records has been soft deleted
+    }
 }
