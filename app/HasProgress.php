@@ -25,6 +25,17 @@ trait HasProgress
     }
 
     /**
+     * Enroll a story.
+     *
+     * @param  \App\Story $story
+     * @return \App\Progress
+     */
+    public function enroll($story)
+    {
+        return $this->progress()->create(['story_id' => $story->id]);
+    }
+
+    /**
      * The stories the achiever is enrolled in.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough

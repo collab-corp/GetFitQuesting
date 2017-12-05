@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 Route::resource('news', 'NewsController');
 Route::apiResource('quests', 'QuestController');
 Route::apiResource('stories', 'StoryController');
+Route::name('story.enroll')->post('stories/{story}/enroll', 'Story\EnrollStoryController@__invoke');
 
 Route::name('me')->get('me', 'MeController');
 Route::name('me.update')->patch('me', 'MeController@update');
