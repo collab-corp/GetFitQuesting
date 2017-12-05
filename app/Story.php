@@ -4,11 +4,12 @@ namespace App;
 
 use App\User;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 use Watson\Rememberable\Rememberable;
 
 class Story extends Model
 {
-    use Rememberable;
+    use Rememberable, Searchable;
 
     protected $fillable = [
         'name', 'body', 'creator_id'
@@ -77,5 +78,32 @@ class Story extends Model
         return $this->belongsToMany(Quest::class, 'quest_story')
             ->withTimestamps()
             ->withPivot('position');
+    }
+
+    /**
+     * The search index name.
+     *
+     * @return string
+     */
+    public function searchableAs()
+    {
+        return 'stories';
+    }
+
+    /**
+     * The fields to be searchable.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        $array = $this->toArray();
+
+        return [
+            'quests_count' => $this->quests->count(),
+            'creator' => $this->creator->name,
+            'name' => $this->name,
+            'body' => $this->body
+        ];
     }
 }
