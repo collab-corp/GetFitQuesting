@@ -1,0 +1,23 @@
+.card{
+    margin-bottom: 1em;
+    background-color: white;
+    border-radius: 5px;
+    border: 1px solid lightgray;
+    .card-title {
+      padding: 10px 20px;
+      border-bottom: 1px solid lightgray;
+      border-top-right-radius: 3px;
+      border-top-left-radius: 3px;
+
+    }
+    .card-body{
+        padding: 10px 20px;
+    }
+    .card-footer{
+        padding: 10px 20px;
+        background-color: white;
+        border-top: 1px solid #dddddd;
+        border-bottom-right-radius: 3px;
+        border-bottom-left-radius: 3px;
+    }
+}

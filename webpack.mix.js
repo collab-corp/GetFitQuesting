@@ -13,10 +13,12 @@ var tailwindcss = require('tailwindcss');
  */
 
 mix.js('resources/assets/js/app.js', 'public/js')
-	.less('resources/assets/less/app.less', 'public/css')
-	.options({
-	  postCss: [
-	    tailwindcss('./tailwind.js'),
-	  ]
-	})
-	.browserSync('http://getfitquesting.dev');
+    .sass('resources/assets/sass/app.scss', 'public/css/app.css')
+    .options({
+      postCss: [
+        require('postcss-discard-comments')({
+            removeAll: true
+        })
+      ]
+    })
+    .browserSync('http://getfitquesting.dev');

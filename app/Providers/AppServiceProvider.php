@@ -4,9 +4,10 @@ namespace App\Providers;
 
 require __DIR__.'/../helpers.php';
 
-use Illuminate\Database\Query\Builder as QueryBuilder;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -17,6 +18,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Schema::defaultStringLength(191);
         // Grab a random element from the database.
         QueryBuilder::macro('random', function () {
             return $this->inRandomOrder()->take(1)->get()->first();

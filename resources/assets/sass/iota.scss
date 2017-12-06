@@ -1,0 +1,35 @@
+/*
+ Pull in Iota Core
+*/
+@import 'node_modules/iotacss/settings/core';
+@import 'node_modules/iotacss/tools/core';
+
+/*
+ Customize Iota first(refer to docs as needed)
+*/
+$iota-objs-grid-flex:true;
+$iota-global-columns:12;
+$iota-utils-size-res: true;
+$iota-utils-color-names: (
+  white   : #FFFFFF,
+  black   : #000000
+);
+
+$iota-global-breakpoints : (
+  xs  : "screen and (min-width: 400px)",
+  sm  : "screen and (min-width: 768px)",
+  md  : "screen and (min-width: 998px)",
+  lg  : "screen and (min-width: 1200px)"
+);
+
+
+/*
+ Then pull in needed components
+*/
+
+@import 'node_modules/iotacss/objects/container';
+@import 'node_modules/iotacss/objects/grid';
+@import 'node_modules/iotacss/tools/breakpoint';
+@import 'node_modules/iotacss/utilities/size';
+@import 'node_modules/iotacss/utilities/color';
+@import 'node_modules/iotacss/utilities/text';
