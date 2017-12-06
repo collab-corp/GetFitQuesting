@@ -23,15 +23,4 @@ class StoryTest extends TestCase
         $this->assertCount(1, $stories);
         $this->assertTrue($stories->contains($story));
     }
-
-    /** @test */
-    public function leavingATeamStorySoftDeletesAllRelativeProgress()
-    {
-        // enroll a team story
-        //
-        // leave the team story
-        //
-        // assert progress records has been soft deleted
-        $this->markTestIncomplete();
-    }
 }

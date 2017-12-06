@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 */
 
 Route::resource('news', 'NewsController');
+Route::apiResource('teams', 'TeamController');
 Route::apiResource('quests', 'QuestController');
 Route::apiResource('stories', 'StoryController');
 Route::name('story.enroll')->post('stories/{story}/enroll', 'Story\EnrollStoryController@__invoke');
