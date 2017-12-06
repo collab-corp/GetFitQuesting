@@ -32,5 +32,6 @@ class StoryTest extends TestCase
         // leave the team story
         //
         // assert progress records has been soft deleted
+        $this->markTestIncomplete();
     }
 }
