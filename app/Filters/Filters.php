@@ -70,9 +70,7 @@ abstract class Filters
         $this->query = $query;
 
         foreach ($this->getFilters() as $filter => $value) {
-            if (method_exists($this, $filter)) {
-                $this->$filter($value);
-            }
+            $this->applyFilter($filter, $value);
         }
 
         return $this->query;
@@ -96,5 +94,22 @@ abstract class Filters
     public function getFilters()
     {
         return $this->request->only($this->filters);
+    }
+
+    /**
+     * filter value using filter.
+     *
+     * @param string $filter
+     * @param mixed  $value
+     *
+     * @return void
+     */
+    private function applyFilter($filter, $value)
+    {
+        if (method_exists($this, $filter)) {
+            $this->$filter($value);
+        } elseif (camel_case($filter) != $filter) {
+            $this->applyFilter(camel_case($filter), $value);
+        }
     }
 }
