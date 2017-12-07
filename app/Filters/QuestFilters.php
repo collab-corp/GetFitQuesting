@@ -4,12 +4,7 @@ namespace App\Filters;
 
 class QuestFilters extends Filters
 {
-    protected $filters = ['type', 'difficulty'];
-
-    protected function type($value)
-    {
-        $this->query->where('type', $value);
-    }
+    protected $filters = ['difficulty'];
 
     protected function difficulty($value)
     {

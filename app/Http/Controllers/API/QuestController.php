@@ -22,7 +22,7 @@ class QuestController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(QuestsIndexQuery $query)
+    public function index(QuestFilters $filters)
     {
         $this->validate(request(), [
             'perPage' => 'nullable|integer|max:25',
@@ -34,7 +34,11 @@ class QuestController extends Controller
             'search' => 'string|min:2|max:40'
         ]);
 
-        return $query()->paginate(
+        $builder = request()->has('search')
+            ? Quest::search(request('search'))
+            : Quest::query();
+
+        return $filters->apply($builder)->paginate(
             request('perPage'),
             request('columns'),
             request('pageName'),

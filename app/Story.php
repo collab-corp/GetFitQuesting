@@ -81,16 +81,6 @@ class Story extends Model
     }
 
     /**
-     * The search index name.
-     *
-     * @return string
-     */
-    public function searchableAs()
-    {
-        return 'stories';
-    }
-
-    /**
      * The fields to be searchable.
      *
      * @return array

@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Filters\TeamFilters;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Story\StoreStoryRequest;
-use App\Http\Requests\Story\UpdateStoryRequest;
-use App\Queries\StoryIndexQuery;
-use App\Story;
+use App\Queries\TeamIndexQuery;
+use App\Team;
 use Illuminate\Http\Request;
 
-class StoryController extends Controller
+class TeamController extends Controller
 {
     public function __construct()
     {
@@ -21,7 +20,7 @@ class StoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(TeamFilters $filters)
     {
         $this->validate(request(), [
             'perPage' => 'nullable|integer|max:25',
@@ -29,14 +28,16 @@ class StoryController extends Controller
             'pageName' => 'nullable|string',
             'page' => 'nullable|integer',
             
+            'sort_by' => 'string',
+            'sort_by_desc' => 'string',
             'search' => 'string|min:2|max:40'
         ]);
 
-        $builder = request()->has('search')
-            ? Story::search(request('search'))
-            : Story::query();
+        $builder = request()->has('search') 
+            ? Team::search(request('search'))
+            : Team::query();
 
-        return $builder->paginate(
+        return $filters->apply($builder)->paginate(
             request('perPage'),
             request('columns'),
             request('pageName'),
@@ -50,48 +51,55 @@ class StoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreStoryRequest $request)
+    public function store(Request $request)
     {
-        $this->authorize('create', new Story);
+        $this->authorize('create', new Team);
 
-        return Story::create($request->all());
+        $this->validate($request, ['name' => 'required|string|min:2|max:40|unique:teams,name']);
+
+        return Team::create([
+            'name' => $request->name,
+            'owner_id' => $request->user()->id
+        ]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Story  $story
+     * @param  \App\Team  $team
      * @return \Illuminate\Http\Response
      */
-    public function show(Story $story)
+    public function show(Team $team)
     {
-        return $story->load(['creator', 'quests']);
+        return $team->withCount('users')->load(['owner']);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Story  $story
+     * @param  \App\Team  $team
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateStoryRequest $request, Story $story)
+    public function update(Request $request, Team $team)
     {
-        $this->authorize('update', $story);
+        $this->authorize('update', $team);
 
-        return tap($story)->update($request->all());
+        return tap($team)->update(
+            $request->validate(['name' => 'string|min:2|max:40|unique:teams,name'])
+        );
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Story  $story
+     * @param  \App\Team  $team
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Story $story)
+    public function destroy(Team $team)
     {
-        $this->authorize('delete', $story);
+        $this->authorize('delete', $team);
 
-        $story->delete();
+        $team->delete();
     }
 }
