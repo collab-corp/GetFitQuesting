@@ -3,6 +3,7 @@
 namespace App\Filters;
 
 use Illuminate\Http\Request;
+use Laravel\Scout\Builder as SearchBuilder;
 
 /**
  * Request Filters.
@@ -62,14 +63,14 @@ abstract class Filters
     /**
      * Apply the filters.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  \Illuminate\Database\Eloquent\Builder | \Illuminate\Database\Eloquent\Collection $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function apply($query)
     {
         $this->query = $query;
 
-        foreach ($this->getFilters() as $filter => $value) {
+        foreach ($this->relevant() as $filter => $value) {
             $this->applyFilter($filter, $value);
         }
 
@@ -81,19 +82,65 @@ abstract class Filters
      *
      * @return \Illuminate\Http\Request
      */
-    public function getRequest()
+    public function request()
     {
         return $this->request;
     }
 
     /**
-     * Fetch all relevant filters from the request.
+     * Grab the filters that has values.
      *
      * @return array
      */
-    public function getFilters()
+    public function relevant()
     {
-        return $this->request->only($this->filters);
+        $filters = ($this->query instanceof SearchBuilder)
+            ? 'searchable'
+            : 'unsearchable';
+
+        return $this->request->only(
+            $this->$filters()
+        );
+    }
+
+    /**
+     * Whether there are unsearchable filters.
+     *
+     * @return boolean
+     */
+    public function hasUnsearchable()
+    {
+        return count($this->unsearchable()) > 0;
+    }
+
+    /**
+     * get the Unsearchable filters.
+     *
+     * @return array
+     */
+    public function unsearchable()
+    {
+        return array_diff($this->all(), $this->searchable());
+    }
+
+    /**
+     * Get only the searchable filters.
+     *
+     * @return array
+     */
+    public function searchable()
+    {
+        return array_filter($this->filters, "is_numeric");
+    }
+
+    /**
+     * Get all filters.
+     *
+     * @return array
+     */
+    public function all()
+    {
+        return $this->filters;
     }
 
     /**
