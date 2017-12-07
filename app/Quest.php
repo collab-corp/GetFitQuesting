@@ -126,7 +126,7 @@ class Quest extends Model implements HasMedia
 
     /**
      * The stories this quest is part of.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function stories()
@@ -155,24 +155,16 @@ class Quest extends Model implements HasMedia
     }
 
     /**
-     * The search index name.
-     *
-     * @return string
-     */
-    public function searchableAs()
-    {
-        return 'quests';
-    }
-
-    /**
      * The fields to be searchable.
      *
      * @return array
      */
     public function toSearchableArray()
     {
-        $array = $this->toArray();
-
-        return $array;
+        return [
+            'name' => $this->name,
+            'type' => $this->type,
+            'difficulty' => $this->difficulty
+        ];
     }
 }

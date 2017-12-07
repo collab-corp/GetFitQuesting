@@ -20,4 +20,16 @@ class Team extends TeamworkTeam
 			$team->users->each->notify(new TeamDisbanded($team));
 		});
 	}
+
+	/**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+	public function toSearchableArray()
+	{
+		return [
+            'name' => $this->name
+        ];
+	}
 }

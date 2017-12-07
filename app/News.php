@@ -121,15 +121,16 @@ class News extends Model implements HasMediaConversions
         }
     }
 
-    public function searchableAs()
-    {
-        return 'news';
-    }
-
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
     public function toSearchableArray()
     {
-        $array = $this->toArray();
-
-        return $array;
+        return [
+            'title' => $this->title,
+            'content' => $this->content
+        ];
     }
 }
