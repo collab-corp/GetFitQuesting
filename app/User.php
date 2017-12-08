@@ -96,6 +96,16 @@ class User extends Authenticatable
         return $this->id && $team->owner_id && $this->id == $team->owner_id;
     }
 
+    public function guilds()
+    {
+        return $this->belongsToMany(Guild::class, 'guild_members');
+    }
+
+    public function myGuilds()
+    {
+        return $this->guilds()->createdBy($this);
+    }
+
     public function news()
     {
         return $this->hasMany(News::class, 'author_id');
