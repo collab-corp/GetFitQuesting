@@ -74,6 +74,16 @@ class Guild extends Model implements HasMediaConversions
     }
 
     /**
+     * A guild may have teams composed of members.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function teams()
+    {
+        return $this->hasMany(Team::class);
+    }
+
+    /**
      * Get the url to the banner or placeholder image.
      *
      * @param  null | string $value

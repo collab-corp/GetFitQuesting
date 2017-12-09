@@ -22,6 +22,7 @@ Route::name('story.leave')->delete('stories/{story}/leave', 'Story\LeaveStoryCon
 
 Route::apiResource('guilds', 'GuildController');
 Route::name('guild.leave')->delete('guilds/{guild}/leave', 'Guild\LeaveGuildController@__invoke');
+Route::name('guild.teams')->get('guild/{guild}/teams', 'Guild\GuildTeamsController@index');
 
 Route::name('me')->get('me', 'MeController');
 Route::name('me.update')->patch('me', 'MeController@update');

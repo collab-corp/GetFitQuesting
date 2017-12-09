@@ -4,6 +4,8 @@ namespace App\Http\Controllers\API;
 
 use App\Filters\TeamFilters;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreTeamRequest;
+use App\Http\Requests\UpdateTeamRequest;
 use App\Queries\TeamIndexQuery;
 use App\Team;
 use Illuminate\Http\Request;
@@ -33,7 +35,7 @@ class TeamController extends Controller
             'search' => 'string|min:2|max:40'
         ]);
 
-        $builder = request()->has('search') 
+        $builder = request()->has('search')
             ? Team::search(request('search'))
             : Team::query();
 
@@ -45,21 +47,14 @@ class TeamController extends Controller
         );
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store(StoreTeamRequest $request)
     {
         $this->authorize('create', new Team);
 
-        $this->validate($request, ['name' => 'required|string|min:2|max:40|unique:teams,name']);
-
         return Team::create([
             'name' => $request->name,
-            'owner_id' => $request->user()->id
+            'guild_id' => $request->guild_id,
+            'owner_id' => $request->user()->id,
         ]);
     }
 
@@ -81,13 +76,11 @@ class TeamController extends Controller
      * @param  \App\Team  $team
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Team $team)
+    public function update(UpdateTeamRequest $request, Team $team)
     {
         $this->authorize('update', $team);
 
-        return tap($team)->update(
-            $request->validate(['name' => 'string|min:2|max:40|unique:teams,name'])
-        );
+        return tap($team)->update($request->validated());
     }
 
     /**

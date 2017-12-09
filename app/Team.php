@@ -12,6 +12,8 @@ class Team extends TeamworkTeam
 {
 	use Achiever, Rememberable, HasProgress, SoftDeletes;
 
+    protected $fillable = ['name', 'owner_id', 'guild_id'];
+
 	protected static function boot()
 	{
 		parent::boot();
@@ -19,6 +21,11 @@ class Team extends TeamworkTeam
 		static::deleted(function ($team) {
 			$team->users->each->notify(new TeamDisbanded($team));
 		});
+	}
+
+	public function guild() 
+	{
+		return $this->belongsTo(Guild::class);
 	}
 
 	/**
@@ -29,7 +36,8 @@ class Team extends TeamworkTeam
 	public function toSearchableArray()
 	{
 		return [
-            'name' => $this->name
+            'name' => $this->name,
+            'guild' => optional($this->guild)->name
         ];
 	}
 }
