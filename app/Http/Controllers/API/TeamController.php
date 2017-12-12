@@ -66,7 +66,7 @@ class TeamController extends Controller
      */
     public function show(Team $team)
     {
-        return $team->withCount('users')->load(['owner']);
+        return $team->load(['owner', 'achievements']);
     }
 
     /**
