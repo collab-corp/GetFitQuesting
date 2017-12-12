@@ -12,6 +12,9 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::post('register', 'Auth\RegisterController@__invoke');
+Route::post('login', 'Auth\LoginController@__invoke');
+Route::post('logout', 'Auth\LogoutController@__invoke');
 
 Route::resource('news', 'NewsController');
 Route::apiResource('teams', 'TeamController');

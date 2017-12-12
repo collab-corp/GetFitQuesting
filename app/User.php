@@ -54,6 +54,11 @@ class User extends Authenticatable
         });
     }
 
+    public function getAccessTokenAttribute()
+    {
+        return $this->token();
+    }
+
     public function getAvatarAttribute(string $avatar = null)
     {
         if (empty($avatar)) {
